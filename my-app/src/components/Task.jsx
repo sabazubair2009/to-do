@@ -1,29 +1,66 @@
-import React, { useState } from 'react';
- import { myDatabase } from '../supabaseclient';
-function Task({refresh}){
-const [userText,setUserText]=useState('')
- async function addtodo(){
-   const cleanText=userText.trim()
-   // if(userText == ''){
-   //    alert("please enter something before adding!")
-   //    return;
-   // }
+ import React, { useState } from 'react';
+import { myDatabase } from '../supabaseclient';
 
+function Task({ refresh }) {
+    const [userText, setUserText] = useState('');
+    const [loading, setLoading] = useState(false);
 
-    await myDatabase.from('to-do-list').insert([{title:userText}])
-    setUserText('')
-    refresh();
- }
+    async function addTodo() {
+        const cleanText = userText.trim();
 
+        if (cleanText === '') {
+            alert('Please enter a task before adding!');
+            return;
+        }
 
+        setLoading(true);
 
+        const { error } = await myDatabase
+            .from('to-do-list')
+            .insert([
+                {
+                    title: cleanText
+                }
+            ]);
 
- return(
-    <div className='task-holder'>
-        <input onChange={(event)=> setUserText(event.target.value)}     value={userText} type="text" placeholder='Add the Task' className='task' />
-        <button onClick={addtodo} className='add-button'>Add Task</button>
-    </div>
- )
+        setLoading(false);
+
+        if (error) {
+            console.error('Supabase insert error:', error);
+            alert(`Could not add task: ${error.message}`);
+            return;
+        }
+
+        setUserText('');
+        await refresh();
+    }
+
+    function handleKeyDown(event) {
+        if (event.key === 'Enter') {
+            addTodo();
+        }
+    }
+
+    return (
+        <div className="task-holder">
+            <input
+                type="text"
+                placeholder="Add the Task"
+                className="task"
+                value={userText}
+                onChange={(event) => setUserText(event.target.value)}
+                onKeyDown={handleKeyDown}
+            />
+
+            <button
+                onClick={addTodo}
+                className="add-button"
+                disabled={loading}
+            >
+                {loading ? 'Adding...' : 'Add Task'}
+            </button>
+        </div>
+    );
 }
 
 export default Task;
