@@ -1,20 +1,9 @@
-
-
-
-
-
-
-
-
-
-
 import React, { useState, useEffect } from 'react';
 import './App.css';
 
 import Header from './components/Header';
 import Task from './components/Task';
 import Footer from './components/Footer';
-
 import { myDatabase } from './supabaseclient';
 
 function App() {
@@ -51,6 +40,7 @@ function App() {
 
         showTodos();
     }
+
 
     async function updateTask(id) {
         const newTask = prompt('Update your task please!');
@@ -94,17 +84,17 @@ function App() {
                             <div className="task-buttons">
 
                                 <button
-                                    className="update-btn"
+                                    className="update-button"
                                     onClick={() => updateTask(item.id)}
                                 >
-                                    Update
-                                </button>
+                                Edit
+                             </button>
 
                                 <button
-                                    className="delete-btn"
+                                    className="delete-button "
                                     onClick={() => deleteTask(item.id)}
                                 >
-                                    Delete
+                                    Remove
                                 </button>
 
                             </div>
