@@ -129,9 +129,9 @@ body {
 }
 
 .update-button {
-    background-color: #d97706;
+    background-color: #a663cc;
     color: white;
-    border: 1px solid #b45309;
+    border: 2px solid #deaaff;
     border-radius: 4px;
     padding: 7px 10px;
     font-size: 12px;
@@ -140,13 +140,13 @@ body {
 }
 
 .update-button:hover {
-    background-color: #b45309;
+    background-color: #5a189a;
 }
 
 .delete-button {
-    background-color: #dc2626;
+    background-color: #6247aa;
     color: white;
-    border: 1px solid #b91c1c;
+    border: 2px solid white;
     border-radius: 4px;
     padding: 7px 10px;
     font-size: 12px;
@@ -155,7 +155,7 @@ body {
 }
 
 .delete-button:hover {
-    background-color: #b91c1c;
+    background-color: #240046;
 }
 
 .message {

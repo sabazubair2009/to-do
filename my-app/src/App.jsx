@@ -1,4 +1,4 @@
- import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 
 import Header from './components/Header';
@@ -11,7 +11,10 @@ function App() {
     const [todo, setTodo] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    // Fetch all tasks
     async function showTodos() {
+        setLoading(true);
+
         const { data, error } = await myDatabase
             .from('to-do-list')
             .select('*')
@@ -19,6 +22,7 @@ function App() {
 
         if (error) {
             console.error('Error fetching tasks:', error);
+            alert(`Could not load tasks: ${error.message}`);
             setLoading(false);
             return;
         }
@@ -27,10 +31,12 @@ function App() {
         setLoading(false);
     }
 
+    // Load tasks when page opens
     useEffect(() => {
         showTodos();
     }, []);
 
+    // Delete task
     async function deleteTask(id) {
         const confirmDelete = window.confirm(
             'Are you sure you want to remove this task?'
@@ -51,32 +57,40 @@ function App() {
             return;
         }
 
-        await showTodos();
+        // Remove it immediately from the screen
+        setTodo((previousTodos) =>
+            previousTodos.filter((task) => task.id !== id)
+        );
     }
 
+    // Edit task
     async function updateTask(id, oldTitle) {
         const newTask = window.prompt(
             'Update your task:',
             oldTitle
         );
 
+        // User pressed Cancel
         if (newTask === null) {
             return;
         }
 
         const cleanText = newTask.trim();
 
+        // Empty task check
         if (cleanText === '') {
             alert('Task cannot be empty!');
             return;
         }
 
-        const { error } = await myDatabase
+        // Update task in Supabase
+        const { data, error } = await myDatabase
             .from('to-do-list')
             .update({
                 title: cleanText
             })
-            .eq('id', id);
+            .eq('id', id)
+            .select();
 
         if (error) {
             console.error('Update error:', error);
@@ -84,7 +98,16 @@ function App() {
             return;
         }
 
-        await showTodos();
+        console.log('Updated task:', data);
+
+        // Update the task immediately on screen
+        setTodo((previousTodos) =>
+            previousTodos.map((task) =>
+                task.id === id
+                    ? { ...task, title: cleanText }
+                    : task
+            )
+        );
     }
 
     return (
@@ -97,7 +120,9 @@ function App() {
                 {loading ? (
                     <p className="message">Loading tasks...</p>
                 ) : todo.length === 0 ? (
-                    <p className="message">No tasks yet. Add your first task!</p>
+                    <p className="message">
+                        No tasks yet. Add your first task!
+                    </p>
                 ) : (
                     <ul className="task-list">
                         {todo.map((item) => (
@@ -113,7 +138,10 @@ function App() {
                                     <button
                                         className="update-button"
                                         onClick={() =>
-                                            updateTask(item.id, item.title)
+                                            updateTask(
+                                                item.id,
+                                                item.title
+                                            )
                                         }
                                     >
                                         Edit
