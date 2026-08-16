@@ -7,4 +7,4 @@ const MY_API_KEY=import.meta.env.VITE_MY_API_KEY;
 
 
 
-export const myDatabase=createClient(supabaseURL, myAPIkey)
+export const myDatabase=createClient(SUPABASE_URL,MY_API_KEY)
