@@ -1,21 +1,11 @@
-//  import React from 'react';
 
-// function Header() {
-//     return (
-//         <header className="app-header">
-//             <h1>TASK APP</h1>
-//         </header>
-//     );
-// }
-
-// export default Header;
 
 import React from "react";
 
 function Header({ user, logout }) {
   return (
     <header className="app-header">
-      <h1>TASK APP</h1>
+      <h1>Welcome To Your Task Manager </h1>
 
       <div className="header-right">
         <span className="user-email">{user?.email}</span>
