@@ -1,4 +1,4 @@
- import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { myDatabase } from '../supabaseclient';
 
 function Task({ refresh }) {
@@ -19,7 +19,8 @@ function Task({ refresh }) {
             .from('to-do-list')
             .insert([
                 {
-                    title: cleanText
+                    title: cleanText,
+                    status: 'pending'
                 }
             ]);
 
@@ -45,7 +46,7 @@ function Task({ refresh }) {
         <div className="task-holder">
             <input
                 type="text"
-                placeholder="Add the Task"
+                placeholder="Add a new task..."
                 className="task"
                 value={userText}
                 onChange={(event) => setUserText(event.target.value)}
